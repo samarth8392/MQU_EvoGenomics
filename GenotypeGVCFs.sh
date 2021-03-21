@@ -22,7 +22,6 @@ module load samtools
 
 #GenomeAnalysisTK -T GenotypeGVCFs \
 #-R /scratch/snyder/m/mathur20/MQU/ch3/align/chick/ref/chicken_genome.fa \
-#-stand_call_conf 0 \
 #-V /scratch/snyder/m/mathur20/MQU/ch3/variants/chick/E6532/E6532.raw.variants.g.vcf \
 #-V /scratch/snyder/m/mathur20/MQU/ch3/variants/chick/E6533/E6533.raw.variants.g.vcf \
 #-V /scratch/snyder/m/mathur20/MQU/ch3/variants/chick/E6535/E6535.raw.variants.g.vcf \
@@ -123,7 +122,7 @@ module load samtools
 #-V /scratch/snyder/m/mathur20/MQU/ch3/variants/chick/E9058/E9058.raw.variants.g.vcf \
 #-V /scratch/snyder/m/mathur20/MQU/ch3/variants/chick/E9059/E9059.raw.variants.g.vcf \
 #-V /scratch/snyder/m/mathur20/MQU/ch3/variants/chick/E9067/E9067.raw.variants.g.vcf \
-#-o /scratch/snyder/m/mathur20/MQU/ch3/variants/final_vcfs/mqu.all100.emit5.raw.g.vcf
+#-o /scratch/snyder/m/mathur20/MQU/ch3/variants/final_vcfs/mqu.all100.raw.g.vcf
 
 
 #gatk --java-options "-Xmx120g" GenotypeGVCFs \
