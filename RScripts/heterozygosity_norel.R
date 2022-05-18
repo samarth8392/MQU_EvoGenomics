@@ -1,9 +1,7 @@
 ###########################################################################
-###                             Samarth Mathur                          ###
-###                        PhD Candidate, DeWoody Lab                   ###
-###                           Purdue University                         ###
+###                          Samarth Mathur, PhD                     	  ###
+###                        The Ohio State University                 	  ###
 ###                                                                     ###
-###     Date Created: 09/09/20                  Last Modified: 09/09/20 ###
 ###########################################################################
 ###########################################################################
 ###                   heterozygosity_norel.R         		                ###
@@ -42,7 +40,7 @@ cols <- c(col_az,col_wtx,col_etx, col_mx,col_azwtx)
 
 # All Samples heterozygosity
 
-het_all <- read.table("~/Documents/Thesis_Research/Final Results/Ch3/revise/diversity/best66.old.auto.noSing.nomiss.het", header = T)
+het_all <- read.table("~/Documents/Thesis_Research/Final Results/Ch3/revise/diversity/best66.auto.noSing.nomiss.het", header = T)
 total <- 960796788 # Total genomic length analyzed
 
 het_all <- cbind(het_all,(het_all$N_SITES-het_all$O.HOM.)/total)
