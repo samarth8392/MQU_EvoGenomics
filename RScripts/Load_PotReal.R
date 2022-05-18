@@ -1,12 +1,10 @@
 ###########################################################################
-###                             Samarth Mathur                          ###
-###                        PhD Candidate, DeWoody Lab                   ###
-###                           Purdue University                         ###
+###                          Samarth Mathur, PhD                     	  ###
+###                        The Ohio State University                 	  ###
 ###                                                                     ###
-###     Date Created: 09/09/20                  Last Modified: 01/18/22 ###
 ###########################################################################
 ###########################################################################
-###                   Load_segDrift.R          		                      ###
+###                   Load_PotReal.R          		                      ###
 ###########################################################################
 
 #### PREREQUISITES #####
@@ -424,9 +422,6 @@ df3 <- rbind(data.frame(SampleID=df2$SampleID,Site=df2$Site,Length=df2$Length,
 
 df3$Site <- factor(df3$Site , levels=c("AZ", "WTX"))
 df3$Length <- factor(df3$Length , levels=c("Long", "Medium","Short"))
-
-
-#df3 <- df3[-which(df3$LoadP == 0 |df3$LoadR ==0 ),]
 
 del.df3 <- df3[which(df3$Type=="Deleterious"),]
 tol.df3 <- df3[which(df3$Type=="Tolerated"),]
