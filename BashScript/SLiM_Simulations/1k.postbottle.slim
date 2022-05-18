@@ -1,0 +1,235 @@
+// Revise (Run3)
+// 2256 genes
+// Both deleterious and beneficical
+// set up a complex 2 population demographic model (with only 1/10 population sizes)
+// POpulation dynamics: Ancestral population with size No splits into Na0, Nb0 
+
+// Model parameters : Model:   [ [115338.26] ][ 36770.38, [1862792.89], [0] ][ 90.95%, [1694184.79, 168608.10] ][ 10022.24, [27581.28, 57243.92], [0, 2], [[None, 1.69e-04][6.01e-05, None]] ]
+
+// popt = [10.186447903592589, 0.7931872167083174, 0.22601834139752801, 0.33209340162472739, 0.31129865646250227, 0.0702396931902601, 9.999999999999998, 4.519631215145741]
+
+
+// Na_0 = 11750 Na_1 = 120000
+// Np1_0 = 96000 Np1_1 = 3600
+// Np2_0 = 24000 Np2_1 = 2750
+// m12 = 4e-04
+// m21 = 4e-05
+
+// the population begins at Na_0 and stays at No for 250,000 generations (Prebottle)
+// then it expands to Na_1 and stays the same for the next 7500 generations (Expand)
+// Then Na_ splits into Np1_0 and Np2_0 at generation 257500 (Bottleneck)
+// Then P1 declines exponentially for 1500 to Np1_1 and P2 stays at Np2_1 until 259000th generation (Postbottle)
+
+// This script only runs from 257,501 generation to 259,000 i.e. Postbottleneck
+
+// Initialize commands to build a genome
+
+initialize() {
+	
+	defineConstant("g",2256); //number of genes
+	defineConstant("geneLength", 1500); // gene length
+	defineConstant("seqLength", g*geneLength);
+	defineConstant("ROHcutoff", 10000);
+	defineConstant("sampleSize", 100);
+	
+	initializeMutationRate(3.13597726022324e-08);
+	
+	initializeMutationType("m12", 0.5, "f",0.0); // neutral mutations
+	for (i in 0:5)
+		initializeMutationType(i, i * 0.1, "g", -0.0314833, 0.186); // deleterious mutations
+	for (j in 6:11)
+		initializeMutationType(j, (j-6) * 0.1, "g", 0.0314833, 0.186); // beneficial mutations
+	
+	m0.convertToSubstitution = F;
+	m6.convertToSubstitution = F;
+	initializeGenomicElementType("g1", c(m12,m0,m6), c(1000,231,2.31)); // Gene element. can have neutral, deleterious, or beneficial mutations 
+	
+	gene_nums=c(320,216,180,170,135,82,73,75,72,63,53,51,55,54,48,27,41,43,44,46,31,25,34,26,39,34,51,39,16,43,8,62);
+	
+	// Set recombination rates:
+	// Recombination rate in between "chrosomomes" is 50% (i.e. unlinked).
+	// Recombination rate within genes is 0.
+	// Recombination rate in between genes is 1e-3, the effective recombination rate for 
+	// 100 kb noncoding sequence with a per-site recombination rate of 1e-8 in between 
+	// each gene.
+	
+	for (i in 1:g){
+		initializeGenomicElement(g1, ((i-1)*geneLength)+(i-1), (i*geneLength)+(i-2) );
+	}
+	
+	rates=NULL;
+	// Multiple chromosomes:
+	for (i in 1:(size(gene_nums)-1)){
+		rates=c(rates, 0, rep(c(1e-3, 0), asInteger(gene_nums[i-1]-1)), 0.5);
+	}
+	rates=c(rates, 0, rep(c(1e-3, 0), asInteger(gene_nums[size(gene_nums)-1]-1)));
+	
+	ends=NULL;
+	for (i in 1:g){
+		ends=c(ends, (i*geneLength)+(i-2), (i*geneLength)+(i-1));
+	}
+	ends=ends[0:(size(ends)-2)];
+	
+	initializeRecombinationRate(rates, ends);
+
+}
+
+// define function getStats that randomly samples a subpopulation for sampSize # of inds and outputs a string of: 
+// pop size, mean fitness, heterozygosity, mean Froh, and avg num of variants of different classes per individual (very str del, str del, mod del, wk del)
+
+function (s) getStats(o pop, i sampSize)
+{
+	i = sample(pop.individuals, sampSize, F);
+	
+	m = sortBy(i.genomes.mutations, "position"); //get all mutations in sample
+	m_uniq = unique(m); // get rid of redundant muts
+	DAF = sapply(m_uniq, "sum(m == applyValue);"); // count number of each mut in pop
+	m_uniq_polym = m_uniq[DAF != i.genomes.size()]; //remove fixed mutations??
+	
+	//initialize vectors
+	ROH_length_sumPerInd = c();
+	Num_VstrDel_muts = c();
+	Num_strDel_muts = c();
+	Num_modDel_muts = c();
+	Num_wkDel_muts = c();
+	Num_VstrBen_muts = c();
+	Num_strBen_muts = c();
+	Num_modBen_muts = c();
+	Num_wkBen_muts = c();
+	ind_het = c();
+	fitness_population = c();
+	
+	for (individual in i) {
+		
+		indm = sortBy(individual.genomes.mutations, "position");
+		indm = indm[match(indm, m_uniq_polym) >= 0];   // Check that individual mutations are not fixed 
+		indm_uniq = unique(indm);
+		
+		genotype = sapply(indm_uniq, "sum(indm == applyValue);");
+		
+		// tally number of mutations for different classes of selection coefficient per individual
+		s = individual.genomes.mutations.selectionCoeff;
+		
+		Num_VstrDel_muts = c(Num_VstrDel_muts, sum(s<=-0.5));
+		Num_strDel_muts = c(Num_strDel_muts, sum(s<=-0.1));
+		Num_modDel_muts = c(Num_modDel_muts, sum(s<=-0.01 & s > -0.1));
+		Num_wkDel_muts = c(Num_wkDel_muts, sum(s<=-0.0001 & s > -0.01));
+		Num_VstrBen_muts = c(Num_VstrBen_muts, sum(s>=0.5));
+		Num_strBen_muts = c(Num_strBen_muts, sum(s>=0.1));
+		Num_modBen_muts = c(Num_modBen_muts, sum(s>=0.01 & s < 0.1));
+		Num_wkBen_muts = c(Num_wkBen_muts, sum(s>=0.0001 & s < 0.01));
+		
+		if (isNULL(genotype)) {
+			ind_het = c(ind_het, 0); //putting this here to avoid error when trying to sum null vector
+			next;
+		}
+		
+		ind_het = c(ind_het, sum(genotype==1)/(seqLength));
+		
+		//code for getting ROHs
+		
+		ID_het = (genotype == 1); //outputs T/F for genotypes if they are het or homDer
+		ID_homDer = (genotype == 2);
+		pos_het = indm_uniq.position[ID_het]; //outputs positions of heterozgoys genotypes
+		
+		startpos = c(0, pos_het); //adds 0 to beggining of vector of hets
+		endpos = c(pos_het, sim.chromosome.lastPosition); //adds last position in genome to vector of hets
+		pos_het_diff = endpos - startpos;
+		ROH_startpos = startpos[pos_het_diff > ROHcutoff]; //filter out startpos that dont correspond to ROH > 1Mb
+		ROH_endpos = endpos[pos_het_diff > ROHcutoff];
+		ROH_length = pos_het_diff[pos_het_diff > ROHcutoff]; //vector of ROHs for each individual	
+		ROH_length_sum = sum(ROH_length);
+		ROH_length_sumPerInd = c(ROH_length_sumPerInd, ROH_length_sum); // add sum of ROHs for each individual to vector of ROHs for all individuals
+	}
+	
+	return(pop.individuals.size() + "," + mean(ind_het) + "," + mean(ROH_length_sumPerInd)/seqLength + "," + mean(Num_VstrDel_muts) + "," + mean(Num_strDel_muts)+ "," + mean(Num_modDel_muts) + "," + mean(Num_wkDel_muts)+ "," + mean(Num_VstrBen_muts) + "," + mean(Num_strBen_muts)+ "," + mean(Num_modBen_muts) + "," + mean(Num_wkBen_muts));
+}
+
+107501 late() {
+	sim.readFromPopulationFile("/fs/ess/scratch/PAS1533/smathur/mqu_ch3/slim/1k/output/1k.gen107501.R1.slim");
+}
+
+107502 early() {
+	sim.addSubpopSplit("p1",96000, p0); // P1 = Arizona and P2 = Texas
+	sim.addSubpopSplit("p2",24000, p0);
+}
+
+107502 late() {
+	p1.setSubpopulationSize(96000);
+	p2.setSubpopulationSize(2750);
+	p1.setMigrationRates(c(p2), c(4.0e-05)); // TX to AZ migration = 4e-05
+	p2.setMigrationRates(c(p1), c(4.0e-04)); // AZ to TX migration = 4e-04
+}
+
+// Set up exponential decline for AZ that goes for 1500 years, Generation = 250502+1500 = 252002 
+// Slope = 1- (96000/3600)^1/1500 = 0.00219
+
+107502:109002 {
+	t = sim.generation - 107502;
+	p1_size = round(96000*0.99781^t);
+	p1.setSubpopulationSize(asInteger(p1_size));
+}
+
+// no migration in the last 200 years
+
+108802 late(){
+	p1.setMigrationRates(c(p2), c(0));
+	p2.setMigrationRates(c(p1), c(0));
+}
+
+//track statistics every 50 generations
+
+107502:109002 {
+	if ((sim.generation-2) % 50 == 0) {
+		stats = getStats(p1, sampleSize);
+		meanFitness = mean(p1.cachedFitness(NULL));
+		cat(sim.generation + "," + "p1" + "," + meanFitness + "," + stats + "\n");
+		stats = getStats(p2, sampleSize);
+		meanFitness = mean(p2.cachedFitness(NULL));
+		cat(sim.generation + "," + "p2"+ "," + meanFitness + "," + stats + "\n");
+	}
+}
+
+// output vcf
+
+107502:109002 late() {
+	if (sim.generation == 107502) {
+		sim.outputFull("/fs/ess/scratch/PAS1533/smathur/mqu_ch3/slim/1k/output/1k.gen107502.R1.slim", T);
+		sampledIndividuals = c(sample(p1.individuals, 100), sample(p2.individuals, 100));
+		sampledIndividuals.genomes.outputVCF(filePath="/fs/ess/scratch/PAS1533/smathur/mqu_ch3/slim/1k/output/1k.gen107502.R1.vcf");
+	}
+	if (sim.generation == 108002) {
+		sim.outputFull("/fs/ess/scratch/PAS1533/smathur/mqu_ch3/slim/1k/output/1k.gen108002.R1.slim", T);
+		sampledIndividuals = c(sample(p1.individuals, 100), sample(p2.individuals, 100));
+		sampledIndividuals.genomes.outputVCF(filePath="/fs/ess/scratch/PAS1533/smathur/mqu_ch3/slim/1k/output/1k.gen108002.R1.vcf");
+	}
+	if (sim.generation == 108502) {
+		sim.outputFull("/fs/ess/scratch/PAS1533/smathur/mqu_ch3/slim/1k/output/1k.gen108502.R1.slim", T);
+		sampledIndividuals = c(sample(p1.individuals, 100), sample(p2.individuals, 100));
+		sampledIndividuals.genomes.outputVCF(filePath="/fs/ess/scratch/PAS1533/smathur/mqu_ch3/slim/1k/output/1k.gen108502.R1.vcf");
+	}
+	if (sim.generation == 109002) {
+		sim.outputFull("/fs/ess/scratch/PAS1533/smathur/mqu_ch3/slim/1k/output/1k.gen109002.R1.slim", T);
+		sampledIndividuals = c(sample(p1.individuals, 100), sample(p2.individuals, 100));
+		sampledIndividuals.genomes.outputVCF(filePath="/fs/ess/scratch/PAS1533/smathur/mqu_ch3/slim/1k/output/1k.gen109002.R1.vcf");
+	}
+}
+
+//output generation
+257501:259002 late() {
+	cat("Working on generation:" + " " + sim.generation + "\n");
+}
+
+mutation(m0) {
+	s = mut.selectionCoeff;
+	d = 5 - asInteger(min(floor(abs(s) * 100.0), 5.0));
+	mut.setMutationType(d);
+	return T;
+}
+
+mutation(m6) {
+	s = mut.selectionCoeff;
+	d = 5 - asInteger(min(floor(abs(s) * 100.0), 5.0));
+	mut.setMutationType(d);
+	return T;
+}
