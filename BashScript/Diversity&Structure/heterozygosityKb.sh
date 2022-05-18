@@ -49,14 +49,14 @@ done
 
 # Extract heterozygous sites from each population
 
-#for chr in $(seq 1 1 33)
-#do
-#	for pop in az mx wtx etx
-#	do
-#		less chr${chr}/${pop}.best66.hwe | cut -f3 | cut -f2 -d "/" \
-#		> chr${chr}/${pop}.best66.het
-#	done
-#done
+for chr in $(seq 1 1 33)
+do
+	for pop in az mx wtx etx
+	do
+		less chr${chr}/${pop}.best66.hwe | cut -f3 | cut -f2 -d "/" \
+		> chr${chr}/${pop}.best66.het
+	done
+done
 
 # Extract heterozygous sites from each individual
 
