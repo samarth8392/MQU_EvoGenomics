@@ -55,7 +55,7 @@
 3. _norelMAF.sh_ : Comparing diversity estimates between Arizona and Texas populations after removing close relatives
 4. _tassel.sh_ : Create phylogenetic trees using genome-wide SNP data
 
-#### ROH,Ancestry,&Demography ####
+##### ROH,Ancestry,&Demography #####
 
 1. _ROH_analysis.sh_ : Estimating ROHs using parameters estimated from a sensitivity analysis 
 2. _HaplotypePhasing.sh_ : Phasing genotypes into haplotypes via Beagle using chicken recombination maps
