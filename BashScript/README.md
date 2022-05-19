@@ -50,4 +50,4 @@
 ##### Diversity #####
 
 1. _HeterozygosityKb.sh_ : Divide genome-wide SNPs by chromosomes and calucate heterozygosity in 1 Mb windows
-2. 
+2. _norelMAF.sh_ : Comparing diversity estimates between Arizona and Texas populations after removing close relatives
