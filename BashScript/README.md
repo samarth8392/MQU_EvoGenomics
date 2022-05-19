@@ -32,3 +32,6 @@
     └── vcf_filtering.sh
 ```
 
+#### Scripts in the order of pipeline ####
+
+# ReadPreproccesing #
