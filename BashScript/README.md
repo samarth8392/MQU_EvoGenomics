@@ -35,3 +35,8 @@
 #### Scripts in the order of pipeline ####
 
 ##### Read Preproccesing #####
+
+1. _Adapter removal_ : Trim raw sequences to remove adapters and low-quality bases (Phred < 20) using Trimmomatic v.0.36
+2. _Alignment.sh_ : Mapping and read processing following GATK “Best Practice Workflow”
+3. _Base_recalibration.sh_ : Recaliberate mapped sequences using known variants from high quality sequnce reads
+4. _Depth&Breadth.sh_ : Calculate map stats using SAMtools
