@@ -1,6 +1,6 @@
 ```
 .
-├── Diversity&Structure
+├── Diversity
 │   ├── heterozygosityKb.sh
 │   ├── norelMAF.sh
 │   └── tassel.sh
@@ -47,7 +47,7 @@
 2. _GenotypeGVCFs.sh_: Genotype calling from combined GVCF information of all samples and SNP filtering
 3. _vcf_filtering.sh_ : SNP filtering using VCFtools
 
-##### Diversity&Structure #####
+##### Diversity #####
 
 1. _HeterozygosityKb.sh_ : Divide genome-wide SNPs by chromosomes and calucate heterozygosity in 1 Mb windows
 2. 
