@@ -6,7 +6,7 @@ An evolutionary perspective on genetic load in small isolated populations. *_Mol
 
 Initial Preprint: 10.22541/au.162495929.94655412/v1
 
-### The summarized repository structure is presented below ###
+#### Summarized repository structure 
 ##### (See each repository for substrutures and details)
 
 ```
@@ -18,6 +18,7 @@ Initial Preprint: 10.22541/au.162495929.94655412/v1
 │   ├── SLiM_Simulations
 │   └── VariantCalling
 ├── RScripts
+├── Lists
 
 
 ```
