@@ -21,7 +21,7 @@ do
 	for pop in az mx wtx etx
 	do
 		mkdir chr${chr}
-		vcftools --vcf /scratch/bell/mathur20/MQU/ch3/revise/vcfs/best66.old.auto.noSing.nomiss.renameChr \
+		vcftools --vcf /scratch/bell/mathur20/MQU/ch3/revise/vcfs/best66.noSing.auto.nomiss.renameChr \
 		--hardy \
 		--bed /scratch/bell/mathur20/MQU/ch3/revise/hetperkb/bins/chr${chr}_bin.txt \
 		--keep /scratch/bell/mathur20/MQU/ch3/revise/lists/${pop}.best66.list \
@@ -38,7 +38,7 @@ do
 	while read -a line
 	do
 		#mkdir chr${chr}
-		vcftools --vcf /scratch/bell/mathur20/MQU/ch3/revise/vcfs/best66.old.auto.poly.nomiss.renameChr.vcf \
+		vcftools --vcf /scratch/bell/mathur20/MQU/ch3/revise/vcfs/best66.noSing.auto.nomiss.renameChr.vcf \
 		--hardy \
 		--bed /scratch/bell/mathur20/MQU/ch3/revise/hetperkb/bins/perkb/chr${chr}_bin.txt \
 		--indv ${line} \
