@@ -70,3 +70,11 @@
 1. _snp_annotation.sh_ : Functional annotation of SNPs and deleteriousness estimation (SIFT) using VEP
 2. _genetic_load.sh_ : Genotype and minor allele frequency (MAF) extraction of each individual and SNPs from the VCF file
 3. _mutation_age.sh_ : Mutation age estimation of deleterious mutations from phased haplotypes using GEVA
+
+##### SLiM_Simulations #####
+
+1. _1k.prebottle.slim_ : SLiM script for evolutionary genomic simulations (Time Epoch 1: Burn-in pre-expasion)
+2. _1k.expand.slim_ : SLiM script for evolutionary genomic simulations (Time Epoch 2: Ancestal expansion and founding bottleneck)
+3. _1k.postbottle.slim_ : SLiM script for evolutionary genomic simulations (Time Epoch 3: Post-bottleneck until present)
+4. _getSLiMoutput.sh_ : Summarize results from 100 independent runs of SLiM simutations
+5. _slimFst_ : Calculate Fst between two populations over time after founding bottleneck
