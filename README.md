@@ -11,7 +11,7 @@ Initial Preprint: 10.22541/au.162495929.94655412/v1
 
 ```
 ├── BashScript
-│   ├── Diversity&Structure
+│   ├── Diversity
 │   ├── MutationAge&Load
 │   ├── ROH,Ancestry,&Demography
 │   ├── ReadPreproccesing
