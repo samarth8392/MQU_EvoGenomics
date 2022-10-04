@@ -2,7 +2,7 @@
 ## Scripts for the Montezuma Quail (MQU) evolutionary genomics project
 
 Samarth Mathur, John Tomeček, Luis Tarango-Arámbula, Robert M. Perez, J. Andrew DeWoody (2022). 
-An evolutionary perspective on genetic load in small isolated populations. *_Molecular Ecology_* (revision resubmitted).
+An evolutionary perspective on genetic load in small isolated populations. *_Evolution_* (under review).
 
 Initial Preprint: 10.22541/au.162495929.94655412/v1
 
