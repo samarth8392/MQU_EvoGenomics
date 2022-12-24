@@ -5,7 +5,7 @@ Samarth Mathur, John M Tomeček, Luis A Tarango-Arámbula, Robert M Perez, J And
 
 
 #### Summarized repository structure ####
-(See each repository for substrutures and details)
+(See each repository for substructures and details)
 
 ```
 ├── BashScript
