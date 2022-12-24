@@ -1,10 +1,8 @@
 # MQU_EvoGenomics
-## Scripts for the Montezuma Quail (MQU) evolutionary genomics project
+### Scripts for the Montezuma Quail (MQU) evolutionary genomics project
 
-Samarth Mathur, John Tomeček, Luis Tarango-Arámbula, Robert M. Perez, J. Andrew DeWoody (2022). 
-An evolutionary perspective on genetic load in small isolated populations. *_Evolution_* (under review).
+Samarth Mathur, John M Tomeček, Luis A Tarango-Arámbula, Robert M Perez, J Andrew DeWoody, An evolutionary perspective on genetic load in small, isolated populations as informed by whole genome resequencing and forward-time simulations, Evolution, 2022;, qpac061, https://doi.org/10.1093/evolut/qpac061
 
-Initial Preprint: 10.22541/au.162495929.94655412/v1
 
 #### Summarized repository structure ####
 (See each repository for substrutures and details)
